@@ -17,17 +17,28 @@ const HomePage = () => {
     };
 
     const joinRoom = () => {
-        if (!roomId || !userName) {
-            toast.error("RoomID or Username is not provided");
+        if (roomId && !userName) {
+            toast.error("Username is not provided");
+            return;
+        }
+
+        if (!roomId && userName) {
+            toast.error("RoomID is not provided");
             return;
         }
 
         // Navigation / redirect
         navigate(`/editor/${roomId}`, {
             state: {
-                userName
+                userName,
             }
         })
+    }
+
+    const handleInputEnter = (e) => {
+        if (e.code == 'Enter') {
+            joinRoom();
+        }
     }
 
     return (
@@ -47,7 +58,8 @@ const HomePage = () => {
                         type = 'text' 
                         placeholder = 'ROOM ID' 
                         onChange = {(event) => setRoomId(event.target.value)}
-                        value = {roomId}>
+                        value = {roomId}
+                        onKeyUp={handleInputEnter}>
                     </input>
 
                     <input 
@@ -55,10 +67,11 @@ const HomePage = () => {
                         type = 'text' 
                         placeholder = 'USERNAME'
                         onChange = {(event) => setUserName(event.target.value)}
-                        value = {userName}>    
+                        value = {userName}
+                        onKeyUp={handleInputEnter}>    
                     </input>
 
-                    <button className='btn JoinBtn'>JOIN ROOM</button>
+                    <button className='btn JoinBtn' onClick={joinRoom}>JOIN ROOM</button>
 
                     <span className="createInfo">
                         If you don't have an invite then create &nbsp;
