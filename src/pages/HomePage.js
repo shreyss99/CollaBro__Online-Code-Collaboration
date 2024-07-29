@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
 
     const [roomId, setRoomId] = useState('')
     const [userName, setUserName] = useState('')
+    const navigate = useNavigate();
 
     const createNewRoom = (event) => {
         event.preventDefault();
@@ -13,6 +15,20 @@ const HomePage = () => {
         setRoomId(id);
         toast.success('Created a new room')
     };
+
+    const joinRoom = () => {
+        if (!roomId || !userName) {
+            toast.error("RoomID or Username is not provided");
+            return;
+        }
+
+        // Navigation / redirect
+        navigate(`/editor/${roomId}`, {
+            state: {
+                userName
+            }
+        })
+    }
 
     return (
         <div className='homePageWrapper'>
